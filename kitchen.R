@@ -68,7 +68,7 @@ x15  <- rep(c(x14[1]-22,x14[1]),each=2)
 y15  <- c(y14[1],y14[1]+cwd,y14[1]+cwd,y14[1])   
 
 # The odd-shaped counter is made up of an equilateral trapeze (1) and
-# a straight trapezoid (2). The angles of (1) are (65, 65, 115, 115) 
+# a right trapezoid (2). The angles of (1) are (65, 65, 115, 115) 
 # and the angles of (2) are (65, 90, 90, 115).
 
 # length of the side that's toward the door: 2-step Pythagoras.
@@ -80,7 +80,7 @@ a0 <- 90 + 45 - 65
 r0 <- tan(a0*pi/180)
 c0 <- sqrt(h1^2/(1+r0^2))
 
-# These are the (x,y) coordinates of the first obtuse angle of trapese 1,
+# These are the (x,y) coordinates of the first obtuse angle of trapeze (1),
 # the you'd brush against if you came into the kitchen through its front 
 # door and for some reason you decided to veer left. Where Joe's bowls are.
 x0 <- c(x3[3]+c0*r0, NA)
@@ -94,18 +94,31 @@ y0[2] <- y0[1]+sqrt(22.5^2/2)
 x16 <- c(x5[4],x0,x5[3])
 y16 <- c(y5[4],y0,y5[3])
 
+# Now for the right trapezoid (2):
+# The measured sharp angle of 65 can't be right if the walls
+# are perfectly straight as drawn here. If wall 2 is at
+# a 45-degree angle, then the wide side of it will measure
+# 45 + 90 degrees, so the sharp angle of the trapezoid
+# (2) should be 45 + 90 - 65 = 70, which would mean that
+# the wide angle is 180 - 70 = 110 degrees: not the same 
+# 65 / 115 that comes out in actual measurements. So,
+# evidently my walls aren't straight. For plotting purposes,
+# let's pretend they are and use the correct angles.
+x17 <- c(x16[3],rep(x16[3]+20.5,2),x16[4])
+y17 <- c(y16[3],y16[3],y16[4],y16[4])
+
 # filler color for walls vs. counters vs. appliances
 values <- data.frame(
-   id = c(1:16),
-   value = factor(c(rep(3,10),4,5,6,rep(7,3)),
+   id = c(1:17),
+   value = factor(c(rep(3,10),4,5,6,rep(7,4)),
                   labels=c('wall','fridge','stove','pantry','counter'))
 )
 
 pos <- data.frame(id=c(rep(c(1:3),each = 4),
                        rep(4,3),rep(5,4),
-                       rep(6,3),rep(c(7:16),each=4)),
-                  x=c(x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16),
-                  y=c(y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15,y16))
+                       rep(6,3),rep(c(7:17),each=4)),
+                  x=c(x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17),
+                  y=c(y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15,y16,y17))
 
 pos <- merge(pos,values)
 
