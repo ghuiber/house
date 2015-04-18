@@ -96,16 +96,24 @@ y16 <- c(y5[4],y0,y5[3])
 
 # Now for the right trapezoid (2):
 # The measured sharp angle of 65 can't be right if the walls
-# are perfectly straight as drawn here. If wall 2 is at
-# a 45-degree angle, then the wide side of it will measure
+# are perfectly straight as plotted here. If wall 2 is at
+# a 45-degree angle, then the wide sides of it each are
 # 45 + 90 degrees, so the sharp angle of the trapezoid
 # (2) should be 45 + 90 - 65 = 70, which would mean that
 # the wide angle is 180 - 70 = 110 degrees: not the same 
-# 65 / 115 that comes out in actual measurements. So,
-# evidently my walls aren't straight. For plotting purposes,
-# let's pretend they are and use the correct angles.
+# 65 / 115 that comes out in actual measurements. But
+# the 65 / 115 symmetry between the left side of (2)
+# and the right side of (1) is what guarantees that the 
+# two chunks of counter have the same depth cwd. If you 
+# instead trust the calculated 70 / 110 angles for (2)
+# you get a counter (2) that is shallower than cwd: the
+# difference y17[3]-y17[2] works out to 24.73 inches.
+# Evidently my walls aren't straight. 
 x17 <- c(x16[3],rep(x16[3]+20.5,2),x16[4])
 y17 <- c(y16[3],y16[3],y16[4],y16[4])
+
+# Now the footprint of the drywall fill work overhead:
+# GOT HERE!
 
 # filler color for walls vs. counters vs. appliances
 values <- data.frame(
