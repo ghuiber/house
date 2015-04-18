@@ -83,21 +83,29 @@ c0 <- sqrt(h1^2/(1+r0^2))
 # These are the (x,y) coordinates of the first obtuse angle of trapese 1,
 # the you'd brush against if you came into the kitchen through its front 
 # door and for some reason you decided to veer left. Where Joe's bowls are.
-x0 <- x1[3]+c0*r0
-y0 <- y3[3]-c0
+x0 <- c(x3[3]+c0*r0, NA)
+y0 <- c(y3[3]-c0,NA)
+# The shorter end of the trapeze is parallel to the 45-degree wall, so
+# for the (x,y) coordinates of the second obtuse angle you just need
+# the measured length of this shorter end, which is 22.5 inches.
+x0[2] <- x0[1]+sqrt(22.5^2/2)
+y0[2] <- y0[1]+sqrt(22.5^2/2)
+# Now the whole shebang
+x16 <- c(x5[4],x0,x5[3])
+y16 <- c(y5[4],y0,y5[3])
 
 # filler color for walls vs. counters vs. appliances
 values <- data.frame(
-   id = c(1:15),
-   value = factor(c(rep(3,10),4,5,6,rep(7,2)),
+   id = c(1:16),
+   value = factor(c(rep(3,10),4,5,6,rep(7,3)),
                   labels=c('wall','fridge','stove','pantry','counter'))
 )
 
 pos <- data.frame(id=c(rep(c(1:3),each = 4),
                        rep(4,3),rep(5,4),
-                       rep(6,3),rep(c(7:15),each=4)),
-                  x=c(x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15),
-                  y=c(y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15))
+                       rep(6,3),rep(c(7:16),each=4)),
+                  x=c(x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16),
+                  y=c(y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15,y16))
 
 pos <- merge(pos,values)
 
