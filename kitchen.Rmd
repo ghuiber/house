@@ -1,0 +1,46 @@
+---
+title: "kitchen"
+author: "Gabi Huiber"
+date: "April 19, 2015"
+output: slidy_presentation
+---
+
+```{r prelims, results='asis', echo=FALSE, message=FALSE} 
+library("knitr")
+opts_chunk$set(cache=FALSE, echo=FALSE, comment="", fig.cap="")
+```
+
+```{r plot.options, echo=FALSE, message=FALSE}
+require(grid)
+require(gridExtra, quiet=TRUE)
+require(ggplot2, quiet=TRUE)
+theme_set(theme_gray(base_size = 18) + theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.margin = unit(c(1, 2, 0.5, 0.5),"cm"), legend.position='none'))
+read_chunk('kitchen.R')
+```
+
+```{r sketches, message=FALSE}
+```
+
+## Drywall
+
+* Above the upper cabinets there's a drywall filler, about 1ft tall, all around the kitchen. Its footprint is as shown below
+
+```{r drywall}
+pic1 + scale_fill_grey() + theme_bw()
+```
+
+## Counters
+
+* 'Pantry' is a built-in cabinet with two doors and shelves going all the way up to the drywall filler. Replacing with upper-lower combo would add counter space, lose some storage space.
+
+```{r counters}
+pic + scale_fill_grey() + theme_bw()
+```
+
+## All in one
+
+* Above the sink there is a kitchen window.
+
+```{r allinone}
+pic2 + scale_fill_grey() + theme_bw()
+```

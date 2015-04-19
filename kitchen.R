@@ -1,7 +1,8 @@
 # Draw kitchen floorplan with ggplot2
 # bottom left corner (starting point) at (1,1).
-
 library("ggplot2")
+
+## @knitr sketches
 cut   <- 44    # width in inches of 45-degree cut into kitchen (wall 2).
 thk   <- 1     # wall thickness, for drawing purposes.
 cwd   <- 25.25 # counter depth all the way to wall, including raised part.
