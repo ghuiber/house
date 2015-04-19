@@ -3,7 +3,7 @@
 
 library("ggplot2")
 cut   <- 44    # width in inches of 45-degree cut into kitchen (wall 2).
-thk   <- 2     # wall thickness, for drawing purposes.
+thk   <- 1     # wall thickness, for drawing purposes.
 cwd   <- 25.25 # counter depth all the way to wall, including raised part.
 frw   <- 3     # fridge clearance from the 2 walls
 
@@ -35,7 +35,7 @@ y6   <- c(y5[2],y5[2],y5[3])
 # wall 3, facing dining area
 x7   <- rep(c(x6[2],x6[2]+31.5),each=2)
 y7   <- c(c(y6[3],y6[2]),c(y6[2],y6[3]))
-x8   <- x7 + 31.5+43
+x8   <- x7 + 31.5 + 43
 y8   <- y7
 
 # wall 4, with kitchen window
@@ -45,6 +45,33 @@ y9   <- c(y8[2],y8[2]-(5*12+65+thk),y8[2]-(5*12+65+thk),y8[2])
 # wall 5, behind the stove
 x10  <- c(rep(x9[1] - (25+66+12),2),rep(x9[4],2))
 y10  <- c(y9[2],y9[2]-thk,y9[2]-thk,y9[2])
+
+# Now consolidate walls
+wall.x  <- c(x1,x2,x3,x4,x5,x6,x7,x8,x9,x10)
+wall.y  <- c(y1,y2,y3,y4,y5,y6,y7,y8,y9,y10)
+wall.id <- c(rep(c(1:3),each = 4),
+             rep(4,3),rep(5,4),
+             rep(6,3),rep(c(7:10),each=4))
+
+# mill work: door pockets + wall decoration.
+x23  <- x1 + c(0,0,.5,.5)
+x24  <- x23
+x25  <- x23
+x26  <- x23
+y23  <- y1[2] + c(0,4,4,0)
+y24  <- y2[1] - c(4,0,0,4)
+y25  <- y2[2] + c(0,4,4,0)
+y26  <- y3[1] - c(4,0,0,4)
+
+x27  <- x7[4] + c(0,0,4,4)
+x28  <- x8[1] - c(4,4,0,0)
+y27  <- y7 - c(.5,0,0,.5)
+y28  <- y27
+
+# now consolidate millwork
+millwork.x  <- c(x23,x24,x25,x26,x27,x28)
+millwork.y  <- c(y23,y24,y25,y26,y27,y28)
+millwork.id <- rep(c(23:28),each=4)
 
 # bottom layer: fridge, stove, countertops.
 
@@ -112,27 +139,103 @@ y16 <- c(y5[4],y0,y5[3])
 x17 <- c(x16[3],rep(x16[3]+20.5,2),x16[4])
 y17 <- c(y16[3],y16[3],y16[4],y16[4])
 
+# Now consolidate bottom layer
+bottom.x  <- c(x11,x12,x13,x14,x15,x16,x17)
+bottom.y  <- c(y11,y12,y13,y14,y15,y16,y17)
+bottom.id <- rep(c(11:17),each=4)
+
 # Now the footprint of the drywall fill work overhead:
-# GOT HERE!
+# chunk 1
+c1   <- sqrt(27^2/2)-(18+sqrt(27^2/2)-sqrt(44^2/2))
+x18  <- c(rep(x1[3],2), rep(x7[1], 2), x1[3]+18)
+y18  <- c(y3[3]-2,y3[3],y5[3],y3[3]-2+c1,y3[3]-2)
+# chunk 2
+x19  <- c(rep(x18[3],2), rep(x7[3]+2, 2), x18[3]+(sqrt(27^2/2)-c1))
+y19  <- c(y18[5]+c1,y18[3],y18[3],rep(y18[3]-14,2))
+# chunk 3
+x20  <- rep(c(x8[3]-14,x8[3]),each=2)
+y20  <- c(y10[1],y8[1],y8[1],y10[1])
+# chunk 4
+x21  <- rep(c(x10[1],x10[1]+26.5),each=2)
+y21  <- c(y10[1],y10[1]+12+14,y10[1]+12+14,y10[1])
+# chunk 5
+x22  <- c(x21[c(3,4)],x20[c(1,2)])
+y22  <- c(y10[1],y10[1]+14,y10[1]+14,y10[1])
 
-# filler color for walls vs. counters vs. appliances
-values <- data.frame(
-   id = c(1:17),
-   value = factor(c(rep(3,10),4,5,6,rep(7,4)),
-                  labels=c('wall','fridge','stove','pantry','counter'))
+# Now consolidate top layer
+top.x  <- c(x18,x19,x20,x21,x22)
+top.y  <- c(y18,y19,y20,y21,y22)
+top.id <- c(rep(c(18,19),each=5),rep(c(20:22),each=4))
+
+# sink
+sink.x  <- x14[1] + 1.5 + c(0,0,22,22)
+sink.y  <- y14[2] - 24 - c(33,0,0,33)
+sink.id <- rep(29,4)
+
+# filler color for walls vs. millwork
+values0 <- data.frame(
+   id = c(1:10,23:28,29),
+   value = factor(c(rep(3,10),rep(4,6),5),
+                  labels=c('wall','millwork','sink'))
 )
+pos0 <- data.frame(id=c(wall.id,millwork.id,sink.id),
+                  x=c(wall.x,millwork.x,sink.x),
+                  y=c(wall.y,millwork.y,sink.y))
+pos0 <- merge(pos0,values0)
 
-pos <- data.frame(id=c(rep(c(1:3),each = 4),
-                       rep(4,3),rep(5,4),
-                       rep(6,3),rep(c(7:17),each=4)),
-                  x=c(x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17),
-                  y=c(y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15,y16,y17))
+pic0 <- ggplot() + geom_polygon(data=pos0, mapping=aes(x=x, y=y, group=id, fill=value)) +
+   coord_fixed()
 
+# filler color for walls vs. counters vs. appliances vs. millwork
+values <- data.frame(
+   id = c(1:17,23:28,29),
+   value = factor(c(rep(3,10),4,5,6,rep(7,4),rep(8,6),9),
+                  labels=c('wall','fridge','stove','pantry','counter','millwork','sink'))
+)
+pos <- data.frame(id=c(wall.id,bottom.id,millwork.id,sink.id),
+                  x=c(wall.x,bottom.x,millwork.x,sink.x),
+                  y=c(wall.y,bottom.y,millwork.y,sink.y))
 pos <- merge(pos,values)
 
+# filler color for walls vs. drywall build-out overhead vs. millwork
+values1 <- data.frame(
+   id = c(1:10,18:28),
+   value = factor(c(rep(3,10),rep(4,5),rep(5,6)),
+                  labels=c('wall','drywall','millwork'))
+)
+pos1 <- data.frame(id=c(wall.id,top.id,millwork.id),
+                  x=c(wall.x,top.x,millwork.x),
+                  y=c(wall.y,top.y,millwork.y))
+pos1 <- merge(pos1,values1)
+
+# superimpose overhead build-out and counters
+values2 <- data.frame(
+   id = c(1:10,11:17,29,18:28),
+   value = factor(c(rep(3,10),3.1,3.2,3.3,rep(3.4,4),3.6,rep(3.7,5),rep(3.8,6)),
+                  labels=c('wall','fridge','stove','pantry',
+                           'counter','sink','drywall','millwork'))
+)
+pos2 <- data.frame(id=c(wall.id,bottom.id,sink.id,top.id,millwork.id),
+                  x=c(wall.x,bottom.x,sink.x,top.x,millwork.x),
+                  y=c(wall.y,bottom.y,sink.y,top.y,millwork.y))
+pos2 <- merge(pos2,values2)
+
+pic1 <- ggplot() + geom_polygon(data=pos1, mapping=aes(x=x, y=y, group=id, fill=value)) +
+   coord_fixed()
+
+x29 <- sink.x
+y29 <- sink.y
 pic <- ggplot() + geom_polygon(data=pos, mapping=aes(x=x, y=y, group=id, fill=value)) + 
    annotate(geom='text', x=(x11[1]+x11[3])/2, y=(y11[1]+y11[3])/2, label="fridge") + 
    annotate(geom='text', x=(x12[1]+x12[3])/2, y=(y12[1]+y12[3])/2, label="stove") +
    annotate(geom='text', x=(x13[1]+x13[3])/2, y=(y13[1]+y13[3])/2, label="pantry") +
+   annotate(geom='text', x=(x29[1]+x29[3])/2, y=(y29[1]+y29[3])/2, label="sink") +
+   coord_fixed()
+
+pic2 <- ggplot() + geom_polygon(data=pos2, mapping=aes(x=x, y=y, group=id, fill=value), alpha=.5) + 
+   annotate(geom='text', x=(x11[1]+x11[3])/2, y=(y11[1]+y11[3])/2, label="fridge") + 
+   annotate(geom='text', x=(x12[1]+x12[3])/2, y=(y12[1]+y12[3])/2, label="stove") +
+   annotate(geom='text', x=(x13[1]+x13[3])/2, y=(y13[1]+y13[3])/2, label="pantry") +
+   annotate(geom='text', x=(x29[1]+x29[3])/2, y=(y29[1]+y29[3])/2, label="sink") +   
    coord_fixed()
 
