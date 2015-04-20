@@ -2,7 +2,7 @@
 title: "kitchen"
 author: "Gabi Huiber"
 date: "April 19, 2015"
-output: slidy_presentation
+output: ioslides_presentation
 ---
 
 ```{r prelims, results='asis', echo=FALSE, message=FALSE} 
@@ -26,7 +26,7 @@ read_chunk('kitchen.R')
 * Above the upper cabinets there's a drywall filler, about 1ft tall, all around the kitchen. Its footprint is as shown below
 
 ```{r drywall}
-pic1 + scale_fill_grey() + theme_bw()
+pic1 + scale_fill_grey() + theme_bw() + xlab('') + ylab('')
 ```
 
 ## Counters
@@ -34,7 +34,7 @@ pic1 + scale_fill_grey() + theme_bw()
 * 'Pantry' is a built-in cabinet with two doors and shelves going all the way up to the drywall filler. Replacing with upper-lower combo would add counter space, lose some storage space.
 
 ```{r counters}
-pic + scale_fill_grey() + theme_bw()
+pic + scale_fill_grey() + theme_bw() + xlab('') + ylab('')
 ```
 
 ## All in one
@@ -42,5 +42,5 @@ pic + scale_fill_grey() + theme_bw()
 * Above the sink there is a kitchen window.
 
 ```{r allinone}
-pic2 + scale_fill_grey() + theme_bw()
+pic2 + scale_fill_grey() + theme_bw() + xlab('') + ylab('')
 ```

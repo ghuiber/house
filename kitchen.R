@@ -233,7 +233,7 @@ pic <- ggplot() + geom_polygon(data=pos, mapping=aes(x=x, y=y, group=id, fill=va
    annotate(geom='text', x=(x29[1]+x29[3])/2, y=(y29[1]+y29[3])/2, label="sink") +
    coord_fixed()
 
-pic2 <- ggplot() + geom_polygon(data=pos2, mapping=aes(x=x, y=y, group=id, fill=value), alpha=.5) + 
+pic2 <- ggplot() + geom_polygon(data=pos2, mapping=aes(x=x, y=y, group=id, fill=value), alpha=.8) + 
    annotate(geom='text', x=(x11[1]+x11[3])/2, y=(y11[1]+y11[3])/2, label="fridge") + 
    annotate(geom='text', x=(x12[1]+x12[3])/2, y=(y12[1]+y12[3])/2, label="stove") +
    annotate(geom='text', x=(x13[1]+x13[3])/2, y=(y13[1]+y13[3])/2, label="pantry") +
